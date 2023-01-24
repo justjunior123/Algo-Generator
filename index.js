@@ -28,7 +28,7 @@ console.log("Selected Algorithm: ", randomAlgorithm.name)
 // Open up a text editor for the user to enter the algorithm
 const fileName = `algorithm-${randomAlgorithm.name}-${new Date().getTime()}.js`
 fs.writeFileSync(fileName, randomAlgorithm.func.toString());
-console.log({fileName});
+console.log("Name of new file where algorithm will open:",{fileName});
 const vim = spawn('vim', [fileName], {
   stdio: 'inherit'
 });
@@ -36,31 +36,44 @@ const vim = spawn('vim', [fileName], {
 vim.on('close', async (code) => {
     console.log("vim has been closed");
     console.log(`child process exited with code ${code}`);
+    console.log('File moved to modified_algorithms folder');
+    console.log('The name of modified Code:', fileName)
+    console.log('The file Path of modified Code:', path.join('modified_algorithms', fileName))
     // Read the algorithm file
     const algorithm = fs.readFileSync(fileName, 'utf8');
 
-    // Ask user for confirmation before creating session folder
+    // Create modified_algorithms folder if it doesn't exist
+    if (!fs.existsSync('modified_algorithms')){
+    await fs.mkdirSync('modified_algorithms');
+    }
+    // Move the file to modified_algorithms folder
+    fs.rename(fileName, path.join('modified_algorithms', fileName), function (err) {
+        if (err) throw err;
+    });
+
+    //Create inferface in order to read user input
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
     });
-    rl.question("Do you want to create a new session? (y/n) - ", async (answer) => {
+
+    // Ask user if they want to move the file to a session folder
+    rl.question("Do you want to move the file to a session folder? (y/n) - ", async (answer) => {
         if (answer === "y") {
             const sessionName = "session-" + new Date().getTime();
             fs.mkdirSync(sessionName);
 
             // move the file to session folder
-            fs.rename(fileName, path.join(sessionName, fileName), function(err) {
+          await fs.rename(path.join('modified_algorithms', fileName), path.join(sessionName, fileName), function(err) {
                 if (err) throw err;
-                console.log('File moved to session folder');
+                console.log(`File moved to session folder: ${sessionName}`);
             });
-        } else {
-            fs.unlinkSync(fileName);
         }
         rl.close();
         await runTests();
     });
 });
+
 
 const runTests = async () => {
     // Run the algorithm through jest

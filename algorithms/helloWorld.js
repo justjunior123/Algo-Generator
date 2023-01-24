@@ -1,6 +1,6 @@
 
 function algorithm1(input) {
-    return null;
+    return "Hello " + input;
 }
 
 module.exports = algorithm1
