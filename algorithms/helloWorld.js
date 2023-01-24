@@ -1,6 +1,5 @@
-
-function algorithm1(input) {
-    return "Hello " + input;
+function helloWorld(input) {
+    return null;
 }
 
-module.exports = algorithm1
+module.exports = helloWorld;

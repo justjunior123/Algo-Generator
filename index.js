@@ -77,7 +77,7 @@ vim.on('close', async (code) => {
 
 const runTests = async () => {
     // Run the algorithm through jest
-    const jestProcess = exec(`npx jest --config jest.config.js --testMatch '**/*.spec.js'`,
+    const jestProcess = exec(`npx jest --config jest.config.js --testMatch 'test/**/*.spec.js'`,
     { cwd: __dirname });
     jestProcess.stdout.on('data', (data) => {
         console.log(data.toString());
