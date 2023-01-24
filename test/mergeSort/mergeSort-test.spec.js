@@ -3,7 +3,7 @@ const fs = require('fs');
 const vm = require('vm');
 const algorithmFolder = 'modified_algorithms';
 ///////////Change this Line for Descripion when copying and pasting/////////////
-console.log("This is the helloWorld test file--------------------------------");
+console.log("This is the mergeSort test file--------------------------------");
 ////////////////////////////////////////////////////////////////////////////////
 
 const files = fs.readdirSync(path.join(process.cwd(), algorithmFolder));
@@ -36,7 +36,7 @@ console.log("contents inside the current file:",algorithmFileContent);
 console.log("This is the latest algorithm object",latestAlgorithm)
 
 ///////////Change this Line for Descripion when copying and pasting///////////
-const pattern = /algorithm-helloWorld-*/;
+const pattern = /algorithm-mergeSort-*/;
 ////////////////////////////////////////////////////////////////////////////////
 const match = pattern.exec(algorithmFile);
 
@@ -48,7 +48,7 @@ if(match){
 
 if (match) {
   ///////////Change this Line for Descripion when copying and pasting///////////
-  describe('helloWorld', () => {
+  describe('mergeSort', () => {
   //////////////////////////////////////////////////////////////////////////////
     it('should return correct output for input "world"', () => {
       const input = "world";

@@ -1,3 +1,3 @@
 function helloWorld(input) {
-return "Hello world";
+    return null;
 }
