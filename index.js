@@ -8,8 +8,8 @@ const utils = require('./utilities')
 //Read all algorithm files
 const algorithmFolder = 'algorithms';
 let algorithms = [];
-fs.readdirSync(path.join(__dirname, algorithmFolder)).forEach(file => {
-  let algorithm = require(path.resolve(__dirname, algorithmFolder, file));
+fs.readdirSync(path.join(process.env.PROJECT_ROOT, algorithmFolder)).forEach(file => {
+  let algorithm = require(path.resolve(process.env.PROJECT_ROOT, algorithmFolder, file));
   let algorithmDescription = (algorithm.description) ? algorithm.description : "No description provided";
   algorithms.push({name:file.split(".")[0], func: algorithm.func, description: algorithmDescription});
 });
@@ -21,11 +21,6 @@ const randomAlgorithm = algorithms[randomIndex];
 console.log("Selected Algorithm: ", randomAlgorithm.name)
 console.log("Algorithm Description: ", randomAlgorithm.description)
 
-//++++++++++++++++++++++++++++++working code
-// const randomIndex = utils.getRandomInt(0, algorithms.length - 1);
-// const randomAlgorithm = algorithms[randomIndex];
-// console.log("Selected Algorithm: ", randomAlgorithm.name)
-
 // Open up a text editor for the user to enter the algorithm
 const fileName = `algorithm-${randomAlgorithm.name}-${new Date().getTime()}.js`
 fs.writeFileSync(fileName, `/**\n * ${randomAlgorithm.description}\n */\n\n${randomAlgorithm.func.toString()}`);
@@ -35,11 +30,11 @@ const vim = spawn('vim', [fileName], {
 });
 
 vim.on('close', async (code) => {
-    console.log("vim has been closed");
-    console.log(`child process exited with code ${code}`);
-    console.log('File moved to modified_algorithms folder');
-    console.log('The name of modified Code:', fileName)
-    console.log('The file Path of modified Code:', path.join('modified_algorithms', fileName))
+    // console.log("vim has been closed");
+    // console.log(`child process exited with code ${code}`);
+    // console.log('File moved to modified_algorithms folder');
+    // console.log('The name of modified Code:', fileName)
+    // console.log('The file Path of modified Code:', path.join('modified_algorithms', fileName))
     // Read the algorithm file
     const algorithm = fs.readFileSync(fileName, 'utf8');
 
