@@ -1,16 +1,10 @@
-const crypto = require('crypto');
+require('dotenv').config();
 const fs = require('fs');
 const { exec } = require('child_process');
 const path = require('path');
 const spawn = require('child_process').spawn;
 const readline = require('readline');
-
-//Function to generate random number
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(crypto.randomBytes(1).readUInt8() / 255 * (max - min + 1)) + min;
-}
+const utils = require('./utilities')
 
 //Read all algorithm files
 const algorithmFolder = 'algorithms';
@@ -21,8 +15,9 @@ fs.readdirSync(path.join(__dirname, algorithmFolder)).forEach(file => {
 });
 
 // Select a random algorithm
-const randomIndex = getRandomInt(0, algorithms.length - 1);
+const randomIndex = utils.getRandomInt(0, algorithms.length - 1);
 const randomAlgorithm = algorithms[randomIndex];
+module.exports = randomAlgorithm;
 console.log("Selected Algorithm: ", randomAlgorithm.name)
 
 // Open up a text editor for the user to enter the algorithm
@@ -70,27 +65,38 @@ vim.on('close', async (code) => {
             });
         }
         rl.close();
-        await runTests();
+        await utils.runTests(randomAlgorithm);
     });
 });
 
 
-const runTests = async () => {
-    // Run the algorithm through jest
-    const testPath = `test/${randomAlgorithm.name}/${randomAlgorithm.name}-test.spec.js`;
-    const jestProcess = exec(`npx jest --config jest.config.js --testPathPattern ${testPath}`,
-    { cwd: __dirname });
-    jestProcess.stdout.on('data', (data) => {
-        console.log(data.toString());
-    });
-    jestProcess.stderr.on('data', (data) => {
-        console.log(data.toString());
-    });
-    jestProcess.on('close', (code) => {
-        if (code === 0) {
-            console.log("Algorithm passed validation");
-        } else {
-            console.log("Algorithm failed validation");
-        }
-    });
+// const runTests = async () => {
+//     // Run the algorithm through jest
+//     const testPath = `test/${randomAlgorithm.name}/${randomAlgorithm.name}-test.spec.js`;
+//     const jestProcess = exec(`npx jest --config jest.config.js --testPathPattern ${testPath}`,
+//     { cwd: __dirname });
+//     jestProcess.stdout.on('data', (data) => {
+//         console.log(data.toString());
+//     });
+//     jestProcess.stderr.on('data', (data) => {
+//         console.log(data.toString());
+//     });
+//     jestProcess.on('close', (code) => {
+//         if (code === 0) {
+//             console.log("Algorithm passed validation");
+//         } else {
+//             console.log("Algorithm failed validation");
+//         }
+//     });
+// }
+
+//Function to clear the modified_algorithms folder
+const clearModifiedAlgorithms = () => {
+    const algorithmFolder = 'modified_algorithms';
+    if (fs.existsSync(algorithmFolder)) {
+        fs.readdirSync(algorithmFolder).forEach(file => {
+            fs.unlinkSync(path.join(algorithmFolder, file));
+        });
+        console.log(`Contents of ${algorithmFolder} have been cleared`);
+    }
 }
