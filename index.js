@@ -3,7 +3,6 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const path = require('path');
 const spawn = require('child_process').spawn;
-const readline = require('readline');
 const utils = require('./utilities')
 
 //Read all algorithm files
@@ -11,18 +10,25 @@ const algorithmFolder = 'algorithms';
 let algorithms = [];
 fs.readdirSync(path.join(__dirname, algorithmFolder)).forEach(file => {
   let algorithm = require(path.resolve(__dirname, algorithmFolder, file));
-  algorithms.push({name:file.split(".")[0], func: algorithm});
+  let algorithmDescription = (algorithm.description) ? algorithm.description : "No description provided";
+  algorithms.push({name:file.split(".")[0], func: algorithm.func, description: algorithmDescription});
 });
+
 
 // Select a random algorithm
 const randomIndex = utils.getRandomInt(0, algorithms.length - 1);
 const randomAlgorithm = algorithms[randomIndex];
-module.exports = randomAlgorithm;
 console.log("Selected Algorithm: ", randomAlgorithm.name)
+console.log("Algorithm Description: ", randomAlgorithm.description)
+
+//++++++++++++++++++++++++++++++working code
+// const randomIndex = utils.getRandomInt(0, algorithms.length - 1);
+// const randomAlgorithm = algorithms[randomIndex];
+// console.log("Selected Algorithm: ", randomAlgorithm.name)
 
 // Open up a text editor for the user to enter the algorithm
 const fileName = `algorithm-${randomAlgorithm.name}-${new Date().getTime()}.js`
-fs.writeFileSync(fileName, randomAlgorithm.func.toString());
+fs.writeFileSync(fileName, `/**\n * ${randomAlgorithm.description}\n */\n\n${randomAlgorithm.func.toString()}`);
 console.log("Name of new file where algorithm will open:",{fileName});
 const vim = spawn('vim', [fileName], {
   stdio: 'inherit'
@@ -47,10 +53,7 @@ vim.on('close', async (code) => {
     });
 
     //Create inferface in order to read user input
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+    const rl = utils.createUserInterface();
 
     // Ask user if they want to move the file to a session folder
     rl.question("Do you want to move the file to a session folder? (y/n) - ", async (answer) => {
@@ -68,35 +71,3 @@ vim.on('close', async (code) => {
         await utils.runTests(randomAlgorithm);
     });
 });
-
-
-// const runTests = async () => {
-//     // Run the algorithm through jest
-//     const testPath = `test/${randomAlgorithm.name}/${randomAlgorithm.name}-test.spec.js`;
-//     const jestProcess = exec(`npx jest --config jest.config.js --testPathPattern ${testPath}`,
-//     { cwd: __dirname });
-//     jestProcess.stdout.on('data', (data) => {
-//         console.log(data.toString());
-//     });
-//     jestProcess.stderr.on('data', (data) => {
-//         console.log(data.toString());
-//     });
-//     jestProcess.on('close', (code) => {
-//         if (code === 0) {
-//             console.log("Algorithm passed validation");
-//         } else {
-//             console.log("Algorithm failed validation");
-//         }
-//     });
-// }
-
-//Function to clear the modified_algorithms folder
-const clearModifiedAlgorithms = () => {
-    const algorithmFolder = 'modified_algorithms';
-    if (fs.existsSync(algorithmFolder)) {
-        fs.readdirSync(algorithmFolder).forEach(file => {
-            fs.unlinkSync(path.join(algorithmFolder, file));
-        });
-        console.log(`Contents of ${algorithmFolder} have been cleared`);
-    }
-}
