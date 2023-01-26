@@ -5,15 +5,9 @@ const path = require('path');
 const spawn = require('child_process').spawn;
 const utils = require('./utilities')
 
-//Read all algorithm files
+//Read all algorithm files, form selected Folder. TODO: Access Multiple folders
 const algorithmFolder = 'algorithms';
-let algorithms = [];
-fs.readdirSync(path.join(process.env.PROJECT_ROOT, algorithmFolder)).forEach(file => {
-  let algorithm = require(path.resolve(process.env.PROJECT_ROOT, algorithmFolder, file));
-  let algorithmDescription = (algorithm.description) ? algorithm.description : "No description provided";
-  algorithms.push({name:file.split(".")[0], func: algorithm.func, description: algorithmDescription});
-});
-
+let algorithms = utils.readAlgorithms(algorithmFolder);
 
 // Select a random algorithm
 const randomIndex = utils.getRandomInt(0, algorithms.length - 1);
@@ -23,46 +17,36 @@ console.log("Algorithm Description: ", randomAlgorithm.description)
 
 // Open up a text editor for the user to enter the algorithm
 const fileName = `algorithm-${randomAlgorithm.name}-${new Date().getTime()}.js`
-fs.writeFileSync(fileName, `/**\n * ${randomAlgorithm.description}\n */\n\n${randomAlgorithm.func.toString()}`);
-console.log("Name of new file where algorithm will open:",{fileName});
-const vim = spawn('vim', [fileName], {
-  stdio: 'inherit'
-});
+fs.writeFileSync(path.join(process.env.PROJECT_ROOT, "modified_algorithms", fileName), `/**\n * ${randomAlgorithm.description}\n */\n\n${randomAlgorithm.func.toString()}`);
+console.log("Name of new file and path where algorithm will open:",{fileName});
+
+//Open vim using the random algorithm generated.
+console.log("Calling openAlgorithmEditor for pokemon algorithm...");
+const vim = utils.openAlgorithmEditor(randomAlgorithm);
 
 vim.on('close', async (code) => {
-    // console.log("vim has been closed");
-    // console.log(`child process exited with code ${code}`);
-    // console.log('File moved to modified_algorithms folder');
-    // console.log('The name of modified Code:', fileName)
-    // console.log('The file Path of modified Code:', path.join('modified_algorithms', fileName))
-    // Read the algorithm file
-    const algorithm = fs.readFileSync(fileName, 'utf8');
+  //Read the modified algorithm from the file
+  const modifiedAlgorithm = fs.readFileSync(path.join(process.env.PROJECT_ROOT, 'modified_algorithms', fileName), 'utf8');
+  //Update the randomAlgorithm.func with the modified algorithm
+  randomAlgorithm.func = new Function(modifiedAlgorithm);
 
-    // Create modified_algorithms folder if it doesn't exist
-    if (!fs.existsSync('modified_algorithms')){
-    await fs.mkdirSync('modified_algorithms');
-    }
-    // Move the file to modified_algorithms folder
-    fs.rename(fileName, path.join('modified_algorithms', fileName), function (err) {
-        if (err) throw err;
-    });
+  //Create inferface in order to read user input
+  const rl = utils.createUserInterface();
 
-    //Create inferface in order to read user input
-    const rl = utils.createUserInterface();
+  // Ask user if they want to move the file to a session folder
+  rl.question("Do you want to move the file to a session folder? (y/n) - ", async (answer) => {
+      if (answer === "y") {
+          const sessionName = "session-" + new Date().getTime();
+          fs.mkdirSync(sessionName);
 
-    // Ask user if they want to move the file to a session folder
-    rl.question("Do you want to move the file to a session folder? (y/n) - ", async (answer) => {
-        if (answer === "y") {
-            const sessionName = "session-" + new Date().getTime();
-            fs.mkdirSync(sessionName);
-
-            // move the file to session folder
-          await fs.rename(path.join('modified_algorithms', fileName), path.join(sessionName, fileName), function(err) {
-                if (err) throw err;
-                console.log(`File moved to session folder: ${sessionName}`);
-            });
-        }
-        rl.close();
-        await utils.runTests(randomAlgorithm);
-    });
+          // move the file to session folder
+          fs.rename(path.join('modified_algorithms', fileName), path.join(sessionName, fileName), function(err) {
+              if (err) throw err;
+              console.log(`File moved to session folder: ${sessionName}`);
+          });
+      }
+      rl.close();
+      await utils.runTests(randomAlgorithm,fileName);
+  });
 });
+

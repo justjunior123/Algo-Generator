@@ -3,7 +3,7 @@ const { exec } = require('child_process');
 const path = require('path');
 
 
-const runTests = async (randomAlgorithm) => {
+const runTests = async (randomAlgorithm,fileName) => {
   
     // Run the algorithm through jest
     // console.log("Help me debug the environment:",process.env.JEST_CONFIG_PATH);
