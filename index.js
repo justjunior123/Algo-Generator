@@ -17,16 +17,16 @@ const utils = require('./utilities')
 
 // Open up a text editor for the user to enter the algorithm
     const fileName = `algorithm-${randomAlgorithm.name}-${new Date().getTime()}.js`
-    fs.writeFileSync(path.join(process.env.PROJECT_ROOT, "modified_algorithms", fileName), `/**\n * ${randomAlgorithm.description}\n */\n\n${randomAlgorithm.func.toString()}`);
+    const filepath = path.join(process.env.PROJECT_ROOT, "modified_algorithms", fileName); // new
+    // fs.writeFileSync(path.join(process.env.PROJECT_ROOT, "modified_algorithms", fileName), `/**\n * ${randomAlgorithm.description}\n */\n\n${randomAlgorithm.func.toString()}`);
     console.log("Name of new file and path where algorithm will open:",{fileName});
 
 //Open vim using the random algorithm generated.
-    console.log("Calling openAlgorithmEditor for pokemon algorithm...");
-    const vim = utils.openAlgorithmEditor(randomAlgorithm);
+    const vim = utils.openAlgorithmEditor(randomAlgorithm,filepath);
 
 vim.on('close', async (code) => {
     //Read the modified algorithm from the file
-    const modifiedAlgorithm = fs.readFileSync(path.join(process.env.PROJECT_ROOT, 'modified_algorithms', fileName), 'utf8');
+    const modifiedAlgorithm = fs.readFileSync(filepath, 'utf8');
     //Update the randomAlgorithm.func with the modified algorithm
     randomAlgorithm.func = new Function(modifiedAlgorithm);
 
