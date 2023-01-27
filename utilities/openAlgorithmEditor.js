@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const { createNewSessionFile } = require('.');
 const spawn = require('child_process').spawn;
 
 function openAlgorithmEditor(randomAlgorithm, filePath, fileName, editor = 'vim') {
@@ -22,17 +21,6 @@ function openAlgorithmEditor(randomAlgorithm, filePath, fileName, editor = 'vim'
             const modifiedAlgorithm = fs.readFileSync(filePath, 'utf8');
             // Update the randomAlgorithm.func with the modified algorithm
             randomAlgorithm.func = new Function(modifiedAlgorithm);
-            // TODO: Make sure to finish createNewSessionFile() function;
-            // if(await moveToSession() === 'y') {
-            //     const newPath = path.join(process.env.PROJECT_ROOT, 'session_algorithms', newModifiedAlgoFilename)
-            //     fs.rename(filepath, newPath, (err) => {
-            //         if (err) {
-            //             console.log('Error moving file: ' + err);
-            //             return
-            //         }
-            //         console.log('Moved file to session folder')
-            //     });
-            // }
         } catch(err) {
             console.error(`An error occurred while trying to read the modified algorithm from the file: ${err.message}`);
         }
