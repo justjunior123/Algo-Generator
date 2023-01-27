@@ -5,34 +5,35 @@ const path = require('path');
 const spawn = require('child_process').spawn;
 const utils = require('./utilities')
 
-//Read all algorithm files, form selected Folder. TODO: Access Multiple folders
+//Read all algorithm files, from selected Folder. TODO: Access Multiple folders
     const algorithmFolder = 'algorithms';
     let algorithms = utils.readAlgorithms(algorithmFolder);
 
-// Select a random algorithm
+// Select a random algorithm from the folder
     const randomIndex = utils.getRandomInt(0, algorithms.length - 1);
     const randomAlgorithm = algorithms[randomIndex];
     console.log("Selected Algorithm: ", randomAlgorithm.name)
     console.log("Algorithm Description: ", randomAlgorithm.description)
 
 // Open up a text editor for the user to enter the algorithm
-    const fileName = `algorithm-${randomAlgorithm.name}-${new Date().getTime()}.js`
-    const filepath = path.join(process.env.PROJECT_ROOT, "modified_algorithms", fileName); // new
-    // fs.writeFileSync(path.join(process.env.PROJECT_ROOT, "modified_algorithms", fileName), `/**\n * ${randomAlgorithm.description}\n */\n\n${randomAlgorithm.func.toString()}`);
-    console.log("Name of new file and path where algorithm will open:",{fileName});
+    const newModifiedFileName = `algorithm-${randomAlgorithm.name}-${new Date().getTime()}.js`
+    const newModifiedFilePath = path.join(process.env.PROJECT_ROOT, "modified_algorithms", newModifiedFileName); // new
+    console.log("Name of new algorithm file name vim will open:",{newModifiedFileName});
+    console.log("Name of the newModifiedFilePath where the new file will be created:",{newModifiedFilePath});
 
 //Open vim using the random algorithm generated.
-    const vim = utils.openAlgorithmEditor(randomAlgorithm,filepath);
+    const vim = utils.openAlgorithmEditor(randomAlgorithm, newModifiedFilePath, newModifiedFileName, "nano");
 
 vim.on('close', async (code) => {
     //Read the modified algorithm from the file
-    const modifiedAlgorithm = fs.readFileSync(filepath, 'utf8');
+    const modifiedAlgorithm = fs.readFileSync(path.join(process.env.PROJECT_ROOT, 'modified_algorithms', newModifiedFileName), 'utf8');
+    
     //Update the randomAlgorithm.func with the modified algorithm
     randomAlgorithm.func = new Function(modifiedAlgorithm);
 
     //Create inferface in order to read user input
     const rl = utils.createUserInterface();
     rl.close();
-    await utils.runTests(randomAlgorithm,fileName);
+    await utils.runTests(randomAlgorithm,newModifiedFileName);
 });
 
