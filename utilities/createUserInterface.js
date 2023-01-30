@@ -1,8 +1,11 @@
 const readline = require('readline');
 
-module.exports = function() {
-  return readline.createInterface ({
-    input: process.stdin,
-    output: process.stdout
+const createUserInterface = () => {
+  const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
   });
-}
+
+  return rl;
+};
+module.exports = createUserInterface;
