@@ -7,7 +7,9 @@ const utils = require('./utilities')
         
 
 const main = async () => {
-    // await selectedEditor();
+    
+    const editor = await utils.selectTextEditorChoice();
+    console.log(`Selected Editor: ${editor}`);
 
     //Read all algorithm files, from selected Folder, return a promise. TODO: Access Multiple folders
     const algorithmFolder = 'algorithms';
@@ -28,8 +30,8 @@ const main = async () => {
 
     
     //Open vim using the random algorithm generated.
-    const vim = await utils.openAlgorithmEditor(randomAlgorithm, newModifiedFilePath, newModifiedFileName, "nano");
-    
+    const vim = await utils.openAlgorithmEditor(randomAlgorithm, newModifiedFilePath, newModifiedFileName, editor);
+
     console.log("Entering the close block.....");
     vim.on('exit', async (code) => {
         // Create inferface in order to read user input
