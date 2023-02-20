@@ -6,7 +6,8 @@ const clearModifiedAlgorithms = require('./clearModifiedAlgorithms.js')
 const createUserInterface = require('./createUserInterface.js')
 const readAlgorithms = require('./readAlgorithms.js');
 const openAlgorithmEditor = require('./openAlgorithmEditor.js');
-const selectTextEditorChoice = require('./selectTextEditorChoice');
+const selectTextEditorChoice = require('./selectTextEditorChoice.js');
+const selectedFolder = require('./selectedFolder.js')
 
 module.exports = {
   getRandomInt,
@@ -15,5 +16,6 @@ module.exports = {
   createUserInterface,
   readAlgorithms,
   openAlgorithmEditor,
-  selectTextEditorChoice
+  selectTextEditorChoice,
+  selectedFolder
 };
