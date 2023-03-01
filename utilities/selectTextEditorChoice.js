@@ -26,7 +26,7 @@ const selectTextEditorChoice = async () => {
   updateChoices();
 
   process.stdin.on('keypress', (ch, key) => {
-    console.log("This is the key:",key,"This is the ch:",ch)
+    // console.log("This is the key:",key,"This is the ch:",ch) <-- for debugging
     if (key && key.name === 'up') {
       index--;
       if (index < 0) {
