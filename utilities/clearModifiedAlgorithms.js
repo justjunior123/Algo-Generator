@@ -3,13 +3,14 @@ require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
 const createUserInterface = require('./createUserInterface');
+const askQuestion = require('./askQuestion')
 
 const clearModifiedAlgorithms = async () => {
   const rl = createUserInterface();
   const algorithmFolder = 'modified_algorithms';
   while (true) {
     try {
-      const answer = await askQuestion(rl, `\n Are you sure you want to clear the contents of the ${algorithmFolder} folder? (y/n): `);
+      const answer = await askQuestion(`\n Are you sure you want to clear the contents of the ${algorithmFolder} folder? (y/n): `,rl);
       if (answer === 'y') {
         if (fs.existsSync(algorithmFolder)) {
           fs.readdirSync(algorithmFolder).forEach(file => {
@@ -30,14 +31,6 @@ const clearModifiedAlgorithms = async () => {
       break;
     }
   }
-};
-
-const askQuestion = (rl, question) => {
-  return new Promise((resolve, reject) => {
-    rl.question(question, (answer) => {
-      resolve(answer.trim().toLowerCase());
-    });
-  });
 };
 
 module.exports = clearModifiedAlgorithms;

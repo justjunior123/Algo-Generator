@@ -42,7 +42,7 @@ if(typeof currentAlgorithmInTest !== 'function') {
 // console.log("This is the latest algorithm object",currentAlgorithmInTest);
 
 ///////////Change this Line for Descripion when copying and pasting///////////
-const pattern = /algorithm-helloWorld-.*\.js$/;
+const pattern = /algorithm-helloWorldStrings-.*\.js$/;
 ////////////////////////////////////////////////////////////////////////////////
 const match = pattern.exec(currentModifiedAlgorithmFile);
 // console.log("WHAT ARE WE MATCHING:",match);
