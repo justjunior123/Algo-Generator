@@ -9,6 +9,7 @@ const openAlgorithmEditor = require('./openAlgorithmEditor.js');
 const selectTextEditorChoice = require('./selectTextEditorChoice.js');
 const selectedFolder = require('./selectedFolder.js');
 const askQuestion = require('./askQuestion.js')
+const checkAlgorithm = require ('./checkAlgorithm.js')
 
 module.exports = {
   getRandomInt,

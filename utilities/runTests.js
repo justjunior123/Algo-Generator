@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { exec } = require('child_process');
 const path = require('path');
-const clearModifiedAlgorithms = require('./clearModifiedAlgorithms')
+
 
 
 const runTests = async (randomAlgorithm,fileName) => {
