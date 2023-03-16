@@ -22,24 +22,30 @@ const main = async () => {
         }
         
         // TODO: Randomize the algorithms
-        for (const randomAlgorithm of algorithms) {
-            
-            console.log(`This is the name of an algo in the folder currently: ${randomAlgorithm.path}`);
-            
-            // Create a new modified file for the first attempt or reopen the existing modified file for subsequent attempts
-            let modifiedFileName = `algorithm-${randomAlgorithm.name}.js`;
-
-            const testsPassed = await checkAlgorithm(randomAlgorithm, modifiedFileName, editor);
-          
-            if (testsPassed) {
-              tallyScore[1] += 1;
-              tallyScore[0] += 1;
-            } else {
-              tallyScore[0] += 1;
-            }
-        }
-          
         
+        const maxAttempts = 1;
+        for (const randomAlgorithm of algorithms) {
+        
+            console.log(`This is the name of an algo in the folder currently: ${randomAlgorithm.path}`);
+
+            let attempts = 0;
+            let testsPassed = false;
+            let modifiedFileName = `algorithm-${randomAlgorithm.name}-attempt${attempts}.js`;
+
+            while (attempts < maxAttempts && !testsPassed) {
+                attempts++;
+                modifiedFileName = `algorithm-${randomAlgorithm.name}-attempt${attempts}.js`;
+                testsPassed = await checkAlgorithm(randomAlgorithm, modifiedFileName, editor, maxAttempts, attempts);
+                console.log(`------------------------------------------------------------------------------------------------`);
+                console.log(`Inside the while loop: ${testsPassed}`);
+                console.log(`Inside  the while loop attempt: ${attempts}`);
+            }
+        
+            if (testsPassed) {
+                tallyScore[1] += 1;
+            }
+            tallyScore[0] += 1;
+        }
     } catch (error) {
         //Handles any leftover errors
         console.error(error);
