@@ -1,6 +1,4 @@
-
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
 const spawn = require('child_process').spawn;
 
 function openAlgorithmEditor(randomAlgorithm, modifiedAlgorithmFilePath, modifiedFileName, editor = 'vim', previousAttemptFilePath = null, attempts) {
