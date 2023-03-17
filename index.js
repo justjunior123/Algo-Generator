@@ -23,7 +23,7 @@ const main = async () => {
         
         // TODO: Randomize the algorithms
         
-        const maxAttempts = 1;
+        const maxAttempts = 3;
         for (const randomAlgorithm of algorithms) {
         
             console.log(`This is the name of an algo in the folder currently: ${randomAlgorithm.path}`);
@@ -34,11 +34,12 @@ const main = async () => {
 
             while (attempts < maxAttempts && !testsPassed) {
                 attempts++;
+                console.log(`Current attempt ${attempts}`);
                 modifiedFileName = `algorithm-${randomAlgorithm.name}-attempt${attempts}.js`;
                 testsPassed = await checkAlgorithm(randomAlgorithm, modifiedFileName, editor, maxAttempts, attempts);
                 console.log(`------------------------------------------------------------------------------------------------`);
-                console.log(`Inside the while loop: ${testsPassed}`);
-                console.log(`Inside  the while loop attempt: ${attempts}`);
+                // console.log(`Inside the while loop: ${testsPassed}`);
+                // console.log(`Inside  the while loop attempt: ${attempts}`);
             }
         
             if (testsPassed) {
