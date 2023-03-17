@@ -20,5 +20,6 @@ module.exports = {
   openAlgorithmEditor,
   selectTextEditorChoice,
   selectedFolder,
-  askQuestion
+  askQuestion,
+  checkAlgorithm
 };

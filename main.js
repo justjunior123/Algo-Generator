@@ -1,27 +1,22 @@
 require('dotenv').config();
-const fs = require('fs');
-const { exec } = require('child_process');
 const path = require('path');
-const spawn = require('child_process').spawn;
 const utils = require('./utilities');
-const readline = require('readline');
-const checkAlgorithm = require('./utilities/checkAlgorithm');
-        
 
 const main = async () => {
     const tallyScore = [0,0];
     const editor = await utils.selectTextEditorChoice();
     console.log(`Selected Editor: ${editor}`);
     try {
-        //Read all algorithm files, from selected Folder, return a promise. TODO: Access Multiple folders
+        //Read all algorithm files, from selected Folder, return a promise.
         const selectedFolders = await utils.selectedFolder();
         let algorithms = [];
         for (const folder of selectedFolders) {
             const folderAlgorithms = await utils.readAlgorithms(folder);
             algorithms = algorithms.concat(folderAlgorithms);
+            // 1. TODO: Select only certain amount of algorithms
+            // 2. TODO: Randomize the algorithms
         }
         
-        // TODO: Randomize the algorithms
         
         const maxAttempts = 3;
         for (const randomAlgorithm of algorithms) {
@@ -36,10 +31,9 @@ const main = async () => {
                 attempts++;
                 console.log(`Current attempt ${attempts}`);
                 modifiedFileName = `algorithm-${randomAlgorithm.name}-attempt${attempts}.js`;
-                testsPassed = await checkAlgorithm(randomAlgorithm, modifiedFileName, editor, maxAttempts, attempts);
+                testsPassed = await utils.checkAlgorithm(randomAlgorithm, modifiedFileName, editor, maxAttempts, attempts);
                 console.log(`------------------------------------------------------------------------------------------------`);
-                // console.log(`Inside the while loop: ${testsPassed}`);
-                // console.log(`Inside  the while loop attempt: ${attempts}`);
+                
             }
         
             if (testsPassed) {

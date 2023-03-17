@@ -13,7 +13,7 @@ function openAlgorithmEditor(randomAlgorithm, filePath, fileName, editor = 'vim'
     let modifiedAlgorithm = '';
     if (attempts === 1) {
 
-        modifiedAlgorithm = `/**\n * ${randomAlgorithm.description}\n */\n\n${randomAlgorithm.func.toString().replace(/^function\s*\(\s*\)\s*\{([\s\S]*)\}$/, '$1')}`;
+        modifiedAlgorithm = `/**\n * ${randomAlgorithm.description}\n**/\n\n${randomAlgorithm.func.toString().replace(/^function\s*\(\s*\)\s*\{([\s\S]*)\}$/, '$1')}`;
         // console.log(`Golden Goose Egg: ${modifiedAlgorithm}`);
         fs.writeFileSync(filePath, modifiedAlgorithm);
 
