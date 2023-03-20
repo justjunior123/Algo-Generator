@@ -18,7 +18,7 @@ const main = async () => {
         }
         
         
-        const maxAttempts = 3;
+        const maxAttempts = 2;
         for (const randomAlgorithm of algorithms) {
         
             console.log(`This is the name of an algo in the folder currently: ${randomAlgorithm.path}`);
@@ -33,7 +33,6 @@ const main = async () => {
                 modifiedFileName = `algorithm-${randomAlgorithm.name}-attempt${attempts}.js`;
                 testsPassed = await utils.checkAlgorithm(randomAlgorithm, modifiedFileName, editor, maxAttempts, attempts);
                 console.log(`------------------------------------------------------------------------------------------------`);
-                
             }
         
             if (testsPassed) {
