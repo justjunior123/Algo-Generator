@@ -1,14 +1,15 @@
 /**
  * This is a simple hello world algorithm, using arrays!
  *
- * @param {string} input
+ * @param {string} params
  *
- * @returns {string}
+ * @returns {string} This function should return "Hello World"
  */
-const description = "This algorithm takes in a string input and returns the string 'Hello ' concatenated with the input. Using arrays!";
+const description = `This algorithm takes in a string input and returns the STRING "World" as is. Modify the algorithm in order to return
+"Hello World" as a string literal. `;
 
-function helloWorldArrays(input) {
-    return null;
+function helloWorldArrays(params) {
+    // Modify this function to return the expected answer
 }
 
 module.exports = {
