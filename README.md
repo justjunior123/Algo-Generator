@@ -5,6 +5,5 @@ First you will need to clone this Repo. Once you clone the repo you need to make
 
 In order to run this application to start practicing your algorithm skills you will need to cd into the project folder and run the following.
 ```
-node main.js
+npm start
 ```
-
