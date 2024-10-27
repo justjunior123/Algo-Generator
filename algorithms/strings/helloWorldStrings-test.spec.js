@@ -56,9 +56,9 @@ if (match) {
   ///////////Change this Line for Descripion when copying and pasting///////////
   describe('helloWorld', () => {
   //////////////////////////////////////////////////////////////////////////////
-    it('should return correct output for input "world"', () => {
-      const input = "world";
-      const expectedOutput = "Hello world";
+    it('should return correct output for input "World"', () => {
+      const input = "World";
+      const expectedOutput = "Hello World";
       const output = currentAlgorithmInTest(input);
       expect(output).toBe(expectedOutput);
     });
